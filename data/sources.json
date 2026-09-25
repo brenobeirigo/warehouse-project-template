@@ -1,0 +1,9 @@
+{
+  "active_locations": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/DC23ACTIVE.zip",
+    "archive": "DC23ACTIVE.zip",
+    "archive_sha256": "d348c5f3c57dbe9ccf48d39d6540e522000fa9fd071c1aacc8f523dddbbaefe5",
+    "member": "DC23ACTIVE AS OF 050210.xls",
+    "member_sha256": "48ef11e1a1ad87ccf4dde0031abd3020a1db33f82a7ad8c77647ba48babaa6c5"
+  }
+}

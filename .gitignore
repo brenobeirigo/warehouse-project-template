@@ -1,0 +1,8 @@
+/.venv/
+/.deps/
+/data/raw/*
+!/data/raw/.gitkeep
+/artifacts/
+__pycache__/
+*.py[cod]
+*.synctex.gz

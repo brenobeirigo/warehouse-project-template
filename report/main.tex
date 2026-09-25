@@ -1,0 +1,69 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{booktabs}
+\usepackage{url}
+
+\begin{document}
+
+\title{A Reproducible Baseline for Warehouse Inventory Data}
+
+\author{\IEEEauthorblockN{Warehouse Project Team}
+\IEEEauthorblockA{Warehousing course, University of Twente\\
+Replace this line with your group members and group number}}
+
+\maketitle
+
+\begin{abstract}
+This short report shows how a warehouse analysis can run from an approved source
+file to a finished PDF. A Python command checks the source file, calculates a
+zone summary, writes a LaTeX table, and compiles this document. Replace the
+example analysis with the evidence needed for your project.
+\end{abstract}
+
+\begin{IEEEkeywords}
+warehousing, reproducible analysis, inventory, teaching template
+\end{IEEEkeywords}
+
+\section{Purpose}
+The S. P. Richards Philadelphia DC case provides operational data for the
+warehousing course~\cite{spr}. This template uses the active-location snapshot
+to show the complete path from source data to a report table. The example is a
+starting point, not a warehouse improvement recommendation.
+
+\section{Data and method}
+The pipeline reads the \texttt{DC23ACTIVE} sheet from the approved archive. It
+counts rows as active-location records, counts distinct SKU identifiers within
+each zone, and sums the recorded quantity. The pipeline checks the archive and
+extracted file against the SHA-256 values in \texttt{data/sources.json} before
+reading them. It leaves the original files unchanged.
+
+\section{Baseline result}
+\input{artifacts/summary.tex}
+
+\begin{table}[t]
+\caption{Active-location inventory by zone}
+\label{tab:zone-summary}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{artifacts/zone_table.tex}
+\end{table}
+
+The table reports a snapshot of locations and units on hand. It does not
+measure demand, picking time, or storage capacity. A separate example command
+applies a uniform multiplier to recorded units to demonstrate how to add a
+scenario. That calculation is not an inventory policy or forecast.
+
+\section{How to reproduce the report}
+Run \texttt{run.cmd all} on Windows or \texttt{./run.sh all} on macOS or Linux
+from the project directory. Docker installs the Python and LaTeX requirements.
+The command writes the checked source files under \texttt{data/raw}, the data
+table and LaTeX inputs under \texttt{artifacts}, and this PDF as
+\texttt{artifacts/main.pdf}. The project README gives the full instructions.
+This separation of raw data, code, and outputs follows reproducible research
+guidance from The Turing Way~\cite{turingway}.
+
+\bibliographystyle{IEEEtran}
+\bibliography{report/references}
+
+\end{document}

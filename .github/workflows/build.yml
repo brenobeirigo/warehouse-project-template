@@ -1,0 +1,26 @@
+name: Build example report
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Python and LaTeX in Docker
+        run: docker build -t warehouse-project-template .
+      - name: Run the complete pipeline
+        run: docker run --rm -v "$PWD:/workspace" -w /workspace warehouse-project-template python pipeline.py all
+      - name: Check the report and data table
+        run: |
+          test -s artifacts/main.pdf
+          test -s artifacts/zone_summary.csv
+      - name: Save example outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: example-report
+          path: |
+            artifacts/main.pdf
+            artifacts/zone_summary.csv
