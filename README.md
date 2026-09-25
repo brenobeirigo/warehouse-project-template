@@ -95,5 +95,4 @@ Before submitting, clone your chosen commit into a new directory and run the
 same command you put in the README. Check that the data are verified, the PDF
 builds, and its numbers match the CSV. Run it a second time to check that it
 reuses the raw files. Submit the exact Git commit or a ZIP and the final PDF
-through Canvas, following the [course file
-requirements](https://brenobeirigo.github.io/course-wh/assessment/reproducible-project-package.html).
+through Canvas, following the current course instructions.
