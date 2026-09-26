@@ -2,6 +2,7 @@
 
 \usepackage{booktabs}
 \usepackage{float}
+\usepackage{graphicx}
 \usepackage{url}
 
 % Working example and scaffold. Replace the italic prompts with your analysis.
@@ -20,17 +21,41 @@ Replace with your group members and group number}}
 
 \begin{abstract}
 This example checks an approved S.~P.~Richards inventory file and rebuilds a
-zone table in the report. The table describes a stock snapshot; it does not
-establish an improvement. For the final report, replace this abstract with
-your decision, its measured effect against the current operation, the main
-feasibility condition, and the principal uncertainty.
+zone table and chart in the report. Both describe a stock snapshot; they do
+not establish an improvement. For the final report, replace this abstract
+with your decision, its measured effect against the current operation, the
+main feasibility condition, and the principal uncertainty.
 \end{abstract}
 
 \begin{IEEEkeywords}
 warehousing, activity profiling, storage assignment, reproducible analysis
 \end{IEEEkeywords}
 
+\section{How to use this scaffold}
+The final submission is one management report of no more than 12 pages, with
+supporting code. Each of the five assessed parts is worth 10 points. You may
+combine and reorder the suggested subsections to make one clear argument.
+Keep enough evidence in the report and code for every applicable criterion.
+Remove this guidance section and the italic prompts before submission.
+
+\subsection{WH-AS1: diagnosis and activity profiling}
+The rubric weights the warehouse heatmap at 15\%; two customer-order, two
+item-activity, and two inventory profiles at 10\% each; and one time, two
+quality, and two productivity KPIs at 5\% each. The formative WH-AS1
+submission must address every profile and KPI. The final report can select
+the results most relevant to its recommendation, while the code retains
+the complete evidence. The course rules also require each student's two
+assigned peer reviews for that student's WH-AS1 score.
+
+\subsection{WH-AS2--WH-AS5: five criteria per part}
+Each criterion is worth two points. Complete, correct, decision-relevant,
+reproducible evidence earns two; a material omission or minor error earns
+one; missing or materially incorrect evidence earns zero. The sections below
+name the evidence expected for storage, layout, picking, and their combined
+trade-offs. The current course rubric controls the final assessment.
+
 \section{Decision and case}
+\subsection{Proposed decision and expected effect}
 The S.~P.~Richards Philadelphia DC case supplies the operational data for this
 project~\cite{spr}. This example establishes a reproducible inventory baseline.
 It makes no storage or picking recommendation.
@@ -39,23 +64,35 @@ It makes no storage or picking recommendation.
 the proposed change, the current practice, and the expected operational
 effect. Give the conditions under which the recommendation remains feasible.}
 
-\section{Evidence and current operation}
-\subsection{Data, scope, and checks}
+\subsection{Operating context}
+\emph{Student prompt: Define the warehouse area, relevant product and order
+flows, and the decision boundary. Describe the present operation briefly so
+the comparison has a clear baseline.}
+
+\section{Diagnosis and current operation}
+\subsection{Data scope and checks}
 The pipeline reads the \texttt{DC23ACTIVE} sheet from the approved archive. It
 counts active-location records and distinct SKUs by zone, then sums recorded
 units on hand. The source archive and extracted file are checked against the
 SHA-256 values in \texttt{data/sources.json}; the originals are left unchanged.
 
-\emph{Student prompt: Connect the activity profiles from WH-AS1 to the
-decision. For each decisive measure, give its source file, unit, time period,
-calculation, and any missing or assumed information. Put detailed checks in
-the code.}
+\emph{Student prompt: For each decisive measure, give the source file, unit,
+time period, calculation, and any missing or assumed information. Make the
+checks repeatable in the code.}
 
-\subsection{A generated baseline table}
+\subsection{Activity profiles and KPIs}
+\emph{Student prompt: Explain the heatmap, order, item, and inventory patterns
+that motivate the decision. Report the time, quality, and productivity KPIs
+with their denominators. Keep the full WH-AS1 evidence in the code even if
+the final report shows only selected results.}
+
+\subsection{A generated baseline table and chart}
 \input{artifacts/summary.tex}
+\input{artifacts/zone_chart_count.tex}
 
 \begin{table}[H]
-\caption{Active-location inventory by zone}
+\caption{Active-location inventory by zone in the DC23ACTIVE snapshot
+($n=\activeLocationCount$ location records; units on hand are selling units).}
 \label{tab:zone-summary}
 \centering
 \footnotesize
@@ -63,42 +100,83 @@ the code.}
 \input{artifacts/zone_table.tex}
 \end{table}
 
-Table~\ref{tab:zone-summary} reports locations and units on hand at one
-snapshot. It does not measure demand, picking time, or storage capacity. Those
-quantities need separate evidence before they can support a policy choice.
+\begin{figure}[H]
+\centering
+\includegraphics[width=\columnwidth]{artifacts/zone_locations.png}
+\caption{Active-location records by zone in the DC23ACTIVE snapshot
+($n=\activeLocationCount$ records; bar values count location records).}
+\label{fig:zone-locations}
+\end{figure}
 
-\section{Storage, layout, and picking options}
-\emph{Student prompt: Explain the current practice and proposed alternatives.
-Cover the storage assignment and space requirement (WH-AS2), layout and flow
-(WH-AS3), and picking method (WH-AS4). Define the objective, resources,
-constraints, units, and assumptions of each model. Show a compact formulation
-where it helps readers assess the decision. Keep full matrices in the code.}
+Table~\ref{tab:zone-summary} and Fig.~\ref{fig:zone-locations} describe one
+stock snapshot. The chart sorts zones by active-location count, while the
+table also reports SKUs and units. Neither measures demand, picking time, or
+storage capacity. Those quantities need separate evidence before they can
+support a policy choice.
 
-\section{Matched comparison and feasibility}
-\emph{Student prompt: Compare the combined proposal with the current operation
-under the same demand, labor, units, and constraints (WH-AS5). Report absolute
-and relative changes in the measures that matter: travel, cost, throughput,
-space, service, workload, or risk. Show a readable layout figure. Check
-capacity, compatibility, replenishment, and service. Explain interactions
-between the storage, layout, and picking changes.}
+\section{Storage assignment and space (WH-AS2)}
+\subsection{Scope, data, and assumptions}
+\emph{Student prompt: Define products, locations, flows, resources,
+constraints, and the performance measure. Trace each model parameter to
+supplied data or an explicit assumption. Document evidence gaps.}
 
-\section{Recommendation and implementation}
-\emph{Student prompt: Say what management should implement first, where, and
-in what sequence. Give the expected effect and the operational checks required
-before rollout. Name the measure that would trigger a revision.}
+\subsection{Assignment logic and storage policy}
+\emph{Student prompt: State the assignment model compactly, including its
+objective and key constraints. Explain how product and demand characteristics
+lead to a policy that staff can implement. Keep full matrices in the code.}
 
-\section{Sensitivity and limits}
-\emph{Student prompt: Recalculate the comparison under at least one important
-uncertain assumption. Explain whether the recommendation changes. State the
-largest evidence gap and what management should monitor after rollout.}
+\subsection{Baseline comparison and feasibility}
+\emph{Student prompt: Compare the proposal with current assignments using
+absolute and relative effects. Check capacity, compatibility, replenishment,
+and service. Explain the main sensitivity and what management must monitor.}
+
+\section{Layout design (WH-AS3)}
+\subsection{Requirements, departments, and flows}
+\emph{Student prompt: Quantify space, storage, throughput, adjacency, and
+handling needs. Show the proposed departments, interfaces, and flows in a
+labelled layout figure. Connect the arrangement to the storage policy.}
+
+\subsection{Quantitative and operational checks}
+\emph{Student prompt: Calculate distances, space use, congestion proxies, or
+other suitable measures against the current layout. Check access, safety,
+replenishment, staging, and equipment constraints. Explain why this layout is
+preferable to a credible alternative and what implementation would require.}
+
+\section{Picking design (WH-AS4)}
+\subsection{Process and design logic}
+\emph{Student prompt: Define the picking process, staff roles, release rule,
+and operating conditions. Justify routing, batching, zoning, and storage
+interactions using the observed workload.}
+
+\subsection{Matched performance and feasibility}
+\emph{Student prompt: Test the picking change against current practice under
+matched demand. Report the effect on decision-relevant measures. Check labour,
+equipment, replenishment, service, variability, and exception handling.
+Explain the expected benefit, burden, risks, and boundary conditions.}
+
+\section{Integrated trade-offs (WH-AS5)}
+\subsection{Fair comparison and performance}
+\emph{Student prompt: Compare storage, layout, and picking options using the
+same baseline, demand, units, and constraints. Quantify effects on cost,
+throughput, space, service, workload, and risk where evidence permits.}
+
+\subsection{Interactions, uncertainty, and limits}
+\emph{Student prompt: Show where interventions reinforce each other, conflict,
+or shift work elsewhere. Vary a material assumption and show whether the
+preferred option changes. Bound any result that the data cannot support.}
+
+\subsection{Recommendation, sequence, and monitoring}
+\emph{Student prompt: Give management a prioritized action, rollout sequence,
+conditions for implementation, and indicators to monitor. State what result
+would cause you to revise the decision.}
 
 \section{Reproducing the results}
 From the project directory, run \texttt{run.cmd all} on Windows or
 \texttt{./run.sh all} on macOS or Linux. Docker installs Python and LaTeX. The
 command checks original files under \texttt{data/raw}, writes generated tables
-under \texttt{artifacts}, and builds \texttt{artifacts/main.pdf}. Keeping source
-data, code, and generated outputs separate follows reproducible research
-guidance~\cite{turingway}.
+and the chart under \texttt{artifacts}, and builds
+\texttt{artifacts/main.pdf}. Keeping source data, code, and generated outputs
+separate follows reproducible research guidance~\cite{turingway}.
 
 \bibliographystyle{IEEEtran}
 \bibliography{report/references}

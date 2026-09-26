@@ -6,9 +6,11 @@ picking, and trade-off analysis. Organize the pages around a management decision
 The code should retain the detailed evidence even when the report shows only the
 figures and tables needed to explain that decision.
 
-The PDF built from `main.tex` is a working example. Its zone table comes from
-the pipeline. The italic text marks work for your group to complete; it is not
-evidence or a recommendation. Remove those prompts before submitting.
+The PDF built from `main.tex` is a working example. Its zone table and chart
+come from the pipeline. The opening section explains the grading rules, and
+the suggested subsections name the evidence expected for each part. The italic
+text marks work for your group to complete; it is not evidence or a
+recommendation. Remove the guidance and prompts before submitting.
 
 ## A useful sequence
 

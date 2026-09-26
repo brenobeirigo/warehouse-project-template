@@ -2,7 +2,7 @@
 
 This is a working starting point for the University of Twente Warehousing
 project. One command obtains the approved S. P. Richards source files, checks
-them, generates a zone summary and LaTeX table, and builds an IEEE-style PDF.
+them, generates a zone summary, chart, and LaTeX table, and builds an IEEE-style PDF.
 The report is a scaffold for one management argument across the five assessed
 parts. Replace its student prompts and example analysis with your group's work.
 
@@ -24,8 +24,9 @@ On macOS or Linux, use `./run.sh all`. The first run builds the Docker image
 and downloads missing source files, so allow several minutes and enough disk
 space for the archives and extracted files. Later runs reuse verified files in
 `data/raw/`. The command writes `artifacts/zone_summary.csv`,
-`artifacts/zone_table.tex`, and `artifacts/main.pdf`. Open the PDF to see the
-table built from the data.
+`artifacts/zone_table.tex`, `artifacts/zone_locations.png`, and
+`artifacts/main.pdf`. Open the PDF to see the table and chart built from the
+data.
 
 If approved original files are already on your computer, place them in
 `data/raw/` with their original filenames. The pipeline checks their SHA-256
@@ -42,7 +43,7 @@ flowchart LR
     C --> D[Download missing originals]
     D --> E[Verify hashes and extract archives]
     E --> F[Run baseline and example scenario]
-    F --> G[Write CSV and LaTeX table]
+    F --> G[Write CSV, chart, and LaTeX table]
     G --> H[Compile IEEEtran report]
     H --> I[artifacts/main.pdf]
 ```
@@ -50,8 +51,8 @@ flowchart LR
 `pipeline.py` is the common entry point. The example reads the
 `DC23ACTIVE` sheet, counts active locations and distinct SKUs by zone, and
 sums units on hand. It skips the historical file's trailing Ctrl-Z marker.
-`report/main.tex` imports the generated table and summary text. The PDF
-therefore depends on the pipeline output. The `all` command regenerates
+`report/main.tex` imports the generated table, chart, and summary text. The
+PDF therefore depends on the pipeline output. The `all` command regenerates
 these files each time.
 
 Run `run.cmd scenario --factor 1.10` on Windows, or `./run.sh scenario
@@ -64,12 +65,12 @@ scenario settings and random seeds where needed.
 
 ## Report structure and writing help
 
-[The report source](report/main.tex) uses the IEEE conference class. It starts
-with a decision, then moves through the checked baseline, storage, layout and
-picking options, a matched comparison, implementation, and sensitivity. This
-sequence supports one management argument within the course's **12-page
-limit**. The italic text is a student prompt, not a finding. Remove it before
-submission.
+[The report source](report/main.tex) uses the IEEE conference class. Its
+suggested subsections cover the decision, diagnosis, storage, layout, picking,
+matched trade-offs, and implementation. An opening section explains how the
+five parts are graded. The section headings can be reorganized to support one
+management argument within the course's **12-page limit**. The grading notes
+and italic prompts are teaching material. Remove them before submission.
 
 [The writing guide](report/WRITING_GUIDE.md) explains the purpose of each
 section and gives short examples of sentences for results, limitations, and
@@ -93,7 +94,7 @@ documents the format.
 | `report/WRITING_GUIDE.md` | Writing examples and template sources |
 | `report/references.bib` | Report references |
 | `Dockerfile` and `requirements.txt` | Python and LaTeX setup |
-| `artifacts/` | Generated CSV, LaTeX inputs, run record, and PDF; excluded from Git |
+| `artifacts/` | Generated CSV, chart, LaTeX inputs, run record, and PDF; excluded from Git |
 
 The `.cmd` and `.sh` files call the same Python entry point. If you use a
 different language or directory layout, keep the documented full-run command,

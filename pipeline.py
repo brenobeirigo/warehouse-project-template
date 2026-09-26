@@ -16,6 +16,11 @@ from decimal import Decimal, InvalidOperation, ROUND_CEILING
 from pathlib import Path
 
 import xlrd
+import matplotlib
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator, StrMethodFormatter
 
 
 ROOT = Path(__file__).resolve().parent
@@ -178,6 +183,37 @@ def latex_text(value: str) -> str:
     return "".join(replacements.get(char, char) for char in value)
 
 
+def write_zone_chart(rows: list[dict[str, int | str]], record_count: int) -> None:
+    """Plot checked location counts without adding source records to the output."""
+    ordered = sorted(rows, key=lambda row: int(row["active_locations"]), reverse=True)
+    labels = [str(row["zone"]) for row in ordered]
+    counts = [int(row["active_locations"]) for row in ordered]
+
+    figure, axis = plt.subplots(figsize=(3.4, 2.3))
+    bars = axis.barh(labels, counts, color="#19538a", height=0.62)
+    axis.invert_yaxis()
+    axis.set_xlim(0, max(counts) * 1.23)
+    axis.bar_label(bars, labels=[f"{count:,}" for count in counts], padding=3, fontsize=7)
+    axis.set_xlabel("Active-location records", fontsize=8)
+    axis.set_ylabel("Zone", fontsize=8)
+    axis.tick_params(axis="both", labelsize=7, length=0)
+    axis.xaxis.set_major_locator(MaxNLocator(nbins=4, integer=True))
+    axis.xaxis.set_major_formatter(StrMethodFormatter("{x:,.0f}"))
+    axis.grid(axis="x", color="#d9e1e8", linewidth=0.6)
+    axis.set_axisbelow(True)
+    for edge in ("top", "right", "left"):
+        axis.spines[edge].set_visible(False)
+    axis.spines["bottom"].set_color("#9aa9b7")
+    figure.tight_layout(pad=0.4)
+    figure.savefig(ARTIFACTS / "zone_locations.png", dpi=240, facecolor="white")
+    plt.close(figure)
+
+    (ARTIFACTS / "zone_chart_count.tex").write_text(
+        rf"\newcommand{{\activeLocationCount}}{{{record_count:,}}}" + "\n",
+        encoding="utf-8",
+    )
+
+
 def write_baseline(records: list[tuple[str, str, int]], path: Path) -> None:
     ARTIFACTS.mkdir(exist_ok=True)
     rows = summarize(records)
@@ -209,6 +245,7 @@ def write_baseline(records: list[tuple[str, str, int]], path: Path) -> None:
         "Table~\\ref{tab:zone-summary} summarizes the snapshot by zone.\n"
     )
     (ARTIFACTS / "summary.tex").write_text(summary, encoding="utf-8")
+    write_zone_chart(rows, len(records))
 
     metadata = {
         "source_url": sources()["active_locations"]["url"],
@@ -222,7 +259,7 @@ def write_baseline(records: list[tuple[str, str, int]], path: Path) -> None:
     (ARTIFACTS / "run.json").write_text(
         json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
     )
-    print(f"Wrote {ARTIFACTS.relative_to(ROOT) / 'zone_summary.csv'} and LaTeX inputs")
+    print(f"Wrote {ARTIFACTS.relative_to(ROOT) / 'zone_summary.csv'}, chart, and LaTeX inputs")
 
 
 def write_scenario(records: list[tuple[str, str, int]], factor: Decimal) -> None:
