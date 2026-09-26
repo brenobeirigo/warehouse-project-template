@@ -3,7 +3,9 @@
 \usepackage{booktabs}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{siunitx}
 \usepackage{url}
+\sisetup{group-separator={,},group-minimum-digits=4}
 
 % Working example and scaffold. Replace the italic prompts with your analysis.
 % See report/WRITING_GUIDE.md for section purposes and writing examples.
@@ -86,6 +88,23 @@ that motivate the decision. Report the time, quality, and productivity KPIs
 with their denominators. Keep the full WH-AS1 evidence in the code even if
 the final report shows only selected results.}
 
+\subsection{Experimental settings}
+Table~\ref{tab:example-settings} records the input scope and calculation
+choices behind this example. Group related settings and state the value used
+in the reported run. For a simulation, add the demand scenarios, seeds,
+replications, warm-up period, stopping rule, solver version, and tolerances
+that affect its results.
+
+\begin{table}[!ht]
+\caption{Settings used to generate the inventory example; the multiplier is
+an arithmetic illustration, not an estimated demand change.}
+\label{tab:example-settings}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{artifacts/settings_table.tex}
+\end{table}
+
 \subsection{A generated baseline table and chart}
 \input{artifacts/summary.tex}
 \input{artifacts/zone_chart_count.tex}
@@ -113,6 +132,32 @@ stock snapshot. The chart sorts zones by active-location count, while the
 table also reports SKUs and units. Neither measures demand, picking time, or
 storage capacity. Those quantities need separate evidence before they can
 support a policy choice.
+
+\subsection{A result comparison example}
+Table~\ref{tab:scenario-example} shows a comparison layout with a common unit,
+an observed baseline, an illustrative value, and an absolute change. The
+pipeline calculates every cell from the checked source and the stated factor.
+The grouped header states the unit once, and right-aligned numbers make the
+differences easier to inspect.
+
+\begin{table}[H]
+\caption{Observed and illustrative selling units by zone in the DC23ACTIVE
+snapshot ($n=\activeLocationCount$ location records); the illustrative column applies the factor in
+Table~\ref{tab:example-settings} and rounds each zone up to whole units.}
+\label{tab:scenario-example}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{artifacts/scenario_table.tex}
+\end{table}
+
+\input{artifacts/scenario_summary.tex}
+
+\emph{Student prompt: Replace this arithmetic example with a tested
+intervention. Name the baseline, metric, unit, absolute and relative effect,
+and uncertainty. Explain the main result in prose instead of repeating every
+cell. Keep the same conditions across options. Split a crowded table instead
+of shrinking its text.}
 
 \section{Storage assignment and space (WH-AS2)}
 \subsection{Scope, data, and assumptions}

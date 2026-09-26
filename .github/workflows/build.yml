@@ -16,3 +16,5 @@ jobs:
           test -s artifacts/main.pdf
           test -s artifacts/zone_summary.csv
           test -s artifacts/zone_locations.png
+          test -s artifacts/settings_table.tex
+          test -s artifacts/scenario_table.tex

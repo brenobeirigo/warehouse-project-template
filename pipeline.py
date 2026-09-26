@@ -27,6 +27,7 @@ ROOT = Path(__file__).resolve().parent
 RAW = ROOT / "data" / "raw"
 ARTIFACTS = ROOT / "artifacts"
 MANIFEST = ROOT / "data" / "sources.json"
+EXAMPLE_FACTOR = Decimal("1.10")
 
 
 def sha256(path: Path) -> str:
@@ -214,6 +215,34 @@ def write_zone_chart(rows: list[dict[str, int | str]], record_count: int) -> Non
     )
 
 
+def write_settings_table(record_count: int, zone_count: int, factor: Decimal) -> None:
+    """Record the exact data and calculation settings used by this example."""
+    table = [
+        r"\begin{tabular}{@{}p{0.43\columnwidth}p{0.45\columnwidth}@{}}",
+        r"\toprule",
+        r"\textbf{Setting} & \textbf{Value} \\",
+        r"\midrule",
+        r"\multicolumn{2}{@{}l}{\textit{Data}} \\",
+        r"\quad Source & \texttt{DC23ACTIVE} snapshot \\",
+        rf"\quad Location records & \num{{{record_count}}} \\",
+        rf"\quad Zones represented & \num{{{zone_count}}} \\",
+        r"\addlinespace",
+        r"\multicolumn{2}{@{}l}{\textit{Analysis}} \\",
+        r"\quad Location measure & records by zone \\",
+        r"\quad SKU measure & distinct codes by zone \\",
+        r"\quad Quantity measure & selling units on hand \\",
+        r"\addlinespace",
+        r"\multicolumn{2}{@{}l}{\textit{Illustrative scenario}} \\",
+        rf"\quad Unit multiplier & \num{{{factor}}} \\",
+        r"\quad Randomness & none; deterministic \\",
+        r"\bottomrule",
+        r"\end{tabular}",
+    ]
+    (ARTIFACTS / "settings_table.tex").write_text(
+        "\n".join(table) + "\n", encoding="utf-8"
+    )
+
+
 def write_baseline(records: list[tuple[str, str, int]], path: Path) -> None:
     ARTIFACTS.mkdir(exist_ok=True)
     rows = summarize(records)
@@ -246,6 +275,7 @@ def write_baseline(records: list[tuple[str, str, int]], path: Path) -> None:
     )
     (ARTIFACTS / "summary.tex").write_text(summary, encoding="utf-8")
     write_zone_chart(rows, len(records))
+    write_settings_table(len(records), len(rows), EXAMPLE_FACTOR)
 
     metadata = {
         "source_url": sources()["active_locations"]["url"],
@@ -267,15 +297,61 @@ def write_scenario(records: list[tuple[str, str, int]], factor: Decimal) -> None
         raise ValueError("The scenario factor must be greater than zero")
     ARTIFACTS.mkdir(exist_ok=True)
     rows = summarize(records)
+    write_settings_table(len(records), len(rows), factor)
     target = ARTIFACTS / "scenario_inventory_factor.csv"
+    comparisons: list[tuple[str, int, int, int]] = []
     with target.open("w", newline="", encoding="utf-8") as stream:
         writer = csv.writer(stream)
-        writer.writerow(("zone", "baseline_units", "factor", "illustrative_units"))
+        writer.writerow(
+            ("zone", "baseline_units", "factor", "illustrative_units", "change_units")
+        )
         for row in rows:
-            projected = (Decimal(row["units_on_hand"]) * factor).to_integral_value(
+            baseline = int(row["units_on_hand"])
+            projected = (Decimal(baseline) * factor).to_integral_value(
                 rounding=ROUND_CEILING
             )
-            writer.writerow((row["zone"], row["units_on_hand"], str(factor), projected))
+            change = int(projected) - baseline
+            comparisons.append((str(row["zone"]), baseline, int(projected), change))
+            writer.writerow((row["zone"], baseline, str(factor), projected, change))
+
+    table = [
+        r"\begin{tabular}{@{}l S[table-format=7.0] S[table-format=7.0] r@{}}",
+        r"\toprule",
+        r"& \multicolumn{2}{c}{Selling units} & \\",
+        r"\cmidrule(lr){2-3}",
+        r"{Zone} & {Observed} & {Illustrative} & Change \\",
+        r"\midrule",
+    ]
+    for zone, baseline, projected, change in comparisons:
+        table.append(
+            f"{latex_text(zone)} & {baseline} & {projected} & "
+            + rf"\num{{{change}}} \\"
+        )
+    total_baseline = sum(item[1] for item in comparisons)
+    total_projected = sum(item[2] for item in comparisons)
+    total_change = total_projected - total_baseline
+    relative_change = Decimal(total_change) / Decimal(total_baseline) * 100
+    table.extend(
+        (
+            r"\midrule",
+            f"All zones & {total_baseline} & {total_projected} & "
+            + rf"\num{{{total_change}}} \\",
+            r"\bottomrule",
+            r"\end{tabular}",
+        )
+    )
+    (ARTIFACTS / "scenario_table.tex").write_text(
+        "\n".join(table) + "\n", encoding="utf-8"
+    )
+    summary = (
+        rf"Applying a factor of \num{{{factor}}} to each zone's observed units "
+        rf"produces \num{{{total_projected}}} illustrative units, "
+        rf"a change of \num{{{total_change}}} units "
+        rf"(\num{{{relative_change:.1f}}}\%) from the snapshot. "
+        "The total is the sum of zone values rounded up to whole units. "
+        "This arithmetic example does not estimate demand or picking work.\n"
+    )
+    (ARTIFACTS / "scenario_summary.tex").write_text(summary, encoding="utf-8")
     print(f"Wrote {target.relative_to(ROOT)} (illustrative factor only)")
 
 
@@ -313,7 +389,7 @@ def main() -> int:
             write_scenario(records, args.factor)
             return 0
         write_baseline(records, path)
-        write_scenario(records, Decimal("1.10"))
+        write_scenario(records, EXAMPLE_FACTOR)
         build_pdf()
         return 0
     except (OSError, ValueError, zipfile.BadZipFile, xlrd.XLRDError, subprocess.CalledProcessError) as exc:

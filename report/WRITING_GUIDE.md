@@ -43,14 +43,52 @@ support a claimed saving, report the uncertainty instead.
 - Put complete calculations and intermediate outputs in the code. The report
   should show enough method to assess the result without printing full matrices.
 
+## Tables for settings and results
+
+The report demonstrates three table jobs. Table I records the settings needed
+to repeat the calculation. Table II describes the observed inventory. Table III
+places an observed value beside an arithmetic example. The example factor does
+not estimate demand or evaluate a warehouse policy. Replace that comparison
+with tested interventions in the final report.
+
+| Table job | Useful columns | What to say beside it |
+|---|---|---|
+| Experimental settings | Setting, value, unit or evidence source; group rows by data, model, and scenario | State which settings are fixed across comparisons and which ones change. Give seeds and replications when a simulation uses randomness. |
+| Baseline description | Item or zone, count, measured quantity, unit | Name the source period and denominator. Explain the pattern that matters for the decision. |
+| Intervention comparison | Option, common outcome measure, absolute change, relative change | State the shared demand and constraints, then give the effect and its practical meaning. |
+| Sensitivity | Assumption or scenario, tested value, outcome, decision change | Explain where the recommendation changes or remains valid. |
+
+The experimental-settings table adapts a grouped layout from the course
+author's table-design examples. The comparison table adapts a grouped result
+header. Both use [booktabs](https://ctan.org/pkg/booktabs) for light horizontal
+rules and [siunitx](https://ctan.org/pkg/siunitx) for consistent numbers. A
+model with many symbols may also need a separate **symbol, meaning, value**
+table so readers can connect each number to the mathematical formulation.
+
+Keep numbers right aligned and use one precision per column. Put units in
+headers or row labels, state the population and period in the caption, and
+cite the table in the text. Use space and a few horizontal rules to separate
+groups. If a table does not fit at readable type size, remove repeated columns,
+split the table, or move detailed results to the code.
+
+For example, a result paragraph could read: "With the same demand and labor
+inputs, the proposed picking rule reduced modeled travel from [a] to [b] km
+per batch, a change of [x]%. The model excludes replenishment trips, so the
+team will measure those trips before rollout." The sentence names the baseline,
+unit, effect, and limit. Replace the brackets with generated results.
+
 ## Why these templates are useful
 
 | Source | Practice to borrow | How this project uses it |
 |---|---|---|
-| [Natural writing](https://github.com/brenobeirigo/natural-writing/blob/main/SKILL.md) | Name the actor and action, use short paragraphs, and support claims with concrete evidence. | Each section asks for a decision or result in plain language before technical detail. |
-| [Academic writing guide](https://github.com/brenobeirigo/skill-academic-writing) | Give each paragraph a job. Separate method, observed result, interpretation, and limitation. | The report moves from checked baseline to options, matched comparison, recommendation, and sensitivity. The [results](https://github.com/brenobeirigo/skill-academic-writing/blob/main/results.md) and [discussion](https://github.com/brenobeirigo/skill-academic-writing/blob/main/discussion.md) guides are useful while drafting. |
-| [LaTeX thesis template](https://github.com/brenobeirigo/latex-thesis-template/blob/main/README.md#writing-guide-common-elements) | Label and cite tables and figures, use clear captions, keep references together, and automate the build. | This shorter IEEE report uses `booktabs`, `\label`/`\ref`, a bibliography, and a generated table. The thesis page layout is designed for a different length of work. |
-| [TLM assignment template](https://github.com/brenobeirigo/tlm-assignment-template) | Keep calculations traceable while explaining the result beside them. | The pipeline writes checked outputs; the report imports those outputs and interprets only what they show. |
+| Natural writing notes (author's private repository) | Name the actor and action, use short paragraphs, and support claims with concrete evidence. | Each section asks for a decision or result in plain language before technical detail. |
+| Academic writing guide (author's private repository) | Give each paragraph a job. Separate method, observed result, interpretation, and limitation. | The report moves from checked baseline to options, matched comparison, recommendation, and sensitivity. |
+| Table-design compendium (author's private repository) | Group settings by purpose, align comparable results, and explain scope in captions. | The generated settings and comparison tables use these layout principles with warehouse data. |
+| [LaTeX thesis template](https://github.com/brenobeirigo/latex-thesis-template/blob/main/README.md#writing-guide-common-elements) | Label and cite tables and figures, use clear captions, keep references together, and automate the build. | This shorter IEEE report uses `booktabs`, `\label`/`\ref`, a bibliography, and generated tables. The thesis page layout is designed for a different length of work. |
+| TLM assignment template (author's private repository) | Keep calculations traceable while explaining the result beside them. | The pipeline writes checked outputs; the report imports those outputs and interprets only what they show. |
+
+The private repositories are listed to explain the design choices. Students
+can use the examples in this repository without access to them.
 
 The [IEEE conference authoring page](https://conferences.ieeeauthorcenter.ieee.org/write-your-paper/authoring-tools-and-templates/)
 explains the format used by `IEEEtran`. The course assessment brief controls the
