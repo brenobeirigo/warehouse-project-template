@@ -6,13 +6,28 @@ them, generates a zone summary, chart, and LaTeX tables, and builds an IEEE-styl
 The report is a scaffold for one management argument across the five assessed
 parts. Replace its student prompts and example analysis with your group's work.
 
-## Run the example
+## What the course requires
+
+You may use any suitable language and project structure. **Python, Docker,
+LaTeX, and the IEEE format are choices made by this example, not course
+requirements.** Keep `data/raw/` and document one command that runs from the
+project root after your stated software setup. That command must obtain and
+check missing approved source files, run every analysis and simulation used
+in your report, and rebuild the reported numbers, tables, figures, and final
+PDF without manual steps. If it fails, it must stop with a clear error.
+
+For example, a group using R can replace `pipeline.py`, `Dockerfile`, and the
+LaTeX report with its own scripts, dependency file, and report source. The
+group then documents its full-run command and tests it in a clean directory.
+
+## Run this Python example with Docker
 
 Install and start [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 on Windows or macOS, or [Docker Engine](https://docs.docker.com/engine/install/)
-on Linux. The Dockerfile fixes Python 3.12 and installs the Python and LaTeX
-requirements, including `latexmk` and the `IEEEtran` class. No separate Python
-or LaTeX installation is required.
+on Linux to run this repository as provided. The Dockerfile fixes Python 3.12
+and installs its Python and LaTeX requirements, including `latexmk` and the
+`IEEEtran` class. This Docker setup needs no separate Python or LaTeX
+installation on your computer.
 
 From the project directory, run:
 
@@ -34,7 +49,7 @@ hashes against [the source manifest](data/sources.json) and downloads only
 missing files. A mismatch stops the run with a clear error. Do not edit the
 original files.
 
-## The pipeline
+## This example's pipeline
 
 ```mermaid
 flowchart LR
