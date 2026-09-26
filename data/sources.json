@@ -1,9 +1,75 @@
 {
+  "warehouse_map": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/images/BCF-zones.xls",
+    "file": "BCF-zones.xls",
+    "file_sha256": "20da8ff90cc170dfa472a50221132669e47e110e3cacbd67b1066d0311d6cee1"
+  },
+  "reserve_cases": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/DC23CASES.zip",
+    "archive": "DC23CASES.zip",
+    "archive_sha256": "bfbbb8f07a3b496e9e087ef45c993e6810b40780aaa3b7dcc7927eb55329f272",
+    "member": "DC23CASES AS OF 050210.xls",
+    "member_sha256": "7dc5ee4607b56d31f4d50eb74b719660a98912774402a934b8c4fbee2a2237b3"
+  },
   "active_locations": {
     "url": "https://www.warehouse-science.com/wh/projects/spr3/data/DC23ACTIVE.zip",
     "archive": "DC23ACTIVE.zip",
     "archive_sha256": "d348c5f3c57dbe9ccf48d39d6540e522000fa9fd071c1aacc8f523dddbbaefe5",
     "member": "DC23ACTIVE AS OF 050210.xls",
     "member_sha256": "48ef11e1a1ad87ccf4dde0031abd3020a1db33f82a7ad8c77647ba48babaa6c5"
+  },
+  "sku_dimensions": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/PhillyDimStatus2.zip",
+    "archive": "PhillyDimStatus2.zip",
+    "archive_sha256": "2f8fe0a04ef80a8edbdd01e345b41045433013a615fd9857e82cde4c94ca6507",
+    "member": "Phily_Dim_Status2.xls",
+    "member_sha256": "8da5639b6bc323f62c6c1e0ec5824be586a2477126196230465a330a0ef7dad2"
+  },
+  "item_data": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/ITEMDATAV2.txt.zip",
+    "archive": "ITEMDATAV2.txt.zip",
+    "archive_sha256": "d4121754eff7fff8ad2198fc81d2c6774855c0ee75f110f6cf23484bf2095807",
+    "member": "ITEMDATAV2.txt",
+    "member_sha256": "5f4a433d73d2f4fc221e04d6ee055f9f1b672af6827d75c2471c02b97ec429e7"
+  },
+  "replenishment_limits": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/DC23MINMAX2.zip",
+    "archive": "DC23MINMAX2.zip",
+    "archive_sha256": "42fd59018c8653303c0fdf2efb3f4641683fa135438707e4b8998935cade17d0",
+    "member": "DC23MINMAX2.xls",
+    "member_sha256": "6495c842d3b71277239d24c6efa84e498523c00a269505de5f5f0f8d798dc715"
+  },
+  "sales": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/sales.zip",
+    "archive": "sales.zip",
+    "archive_sha256": "685bed09610363820210ea7e9963bda127e3beb1c9ef84a75d7068be6532e948",
+    "member": "dc23Sales04.txt",
+    "member_sha256": "7306a799cb550ea5667643d05ba6d2fc61ea6b75b47162e4c499ea8246e54469"
+  },
+  "active_pick_batches": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/TRCART23.zip",
+    "archive": "TRCART23.zip",
+    "archive_sha256": "d009b7d1973b91dd3ef4cf211a03cbb8b6a7935dd11c8865f12b6a6d1ea42d46",
+    "member": "TRCART23.txt",
+    "member_sha256": "eb2569882b9ff4e6a0ff738e7448815c523a33ec49198550aeb0fb078fcf7f34"
+  },
+  "carton_lines": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/CDCART23.zip",
+    "archive": "CDCART23.zip",
+    "archive_sha256": "e54d94763b40eff6eff7fbabb723ea7400954beda3706ccbd691ddead7b3255d",
+    "member": "CDCART23.txt",
+    "member_sha256": "94470b64f072ea015259144a9a164c0723e3bd4dba04a8a2a9dc58e1271d2555"
+  },
+  "carton_headers": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/CHCART23.zip",
+    "archive": "CHCART23.zip",
+    "archive_sha256": "752576b0a69a050a469d88345ce2c827c0d8401ee68b5ac1cb2b80c0f458a5f2",
+    "member": "CHCART23.txt",
+    "member_sha256": "ff79c2e5e0d9a61377ecd5f8350ad23cc0e38a053b070353ede992409bab8ac3"
+  },
+  "batch_key": {
+    "url": "https://www.warehouse-science.com/wh/projects/spr3/data/batch-key.txt",
+    "file": "batch-key.txt",
+    "file_sha256": "511a0c82edf1c6f9cac58695a3672310b84d8bb4b6c39a25a2d63ea7ea268ae8"
   }
 }

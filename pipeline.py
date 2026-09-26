@@ -41,18 +41,42 @@ def check_hash(path: Path, expected: str) -> None:
         )
 
 
-def source() -> dict[str, str]:
+def sources() -> dict[str, dict[str, str]]:
     with MANIFEST.open(encoding="utf-8") as stream:
-        return json.load(stream)["active_locations"]
+        return json.load(stream)
 
 
-def ensure_data() -> Path:
-    """Use a checked local file, or fetch and extract the approved archive."""
-    spec = source()
-    RAW.mkdir(parents=True, exist_ok=True)
+def download(url: str, destination: Path, expected_hash: str) -> None:
+    """Save a verified download atomically, without retaining partial files."""
+    partial = destination.with_name(destination.name + ".part")
+    partial.unlink(missing_ok=True)
+    print(f"Downloading {url}", flush=True)
+    request = urllib.request.Request(
+        url, headers={"User-Agent": "warehouse-course-template/1.0"}
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=90) as response:
+            with partial.open("wb") as output:
+                shutil.copyfileobj(response, output)
+        check_hash(partial, expected_hash)
+        partial.replace(destination)
+    finally:
+        partial.unlink(missing_ok=True)
+
+
+def ensure_source(spec: dict[str, str]) -> Path:
+    """Verify a local source or fetch it from the approved course URL."""
+    if "file" in spec:
+        path = RAW / spec["file"]
+        if path.exists():
+            check_hash(path, spec["file_sha256"])
+            print(f"Using checked local file: {path.relative_to(ROOT)}")
+        else:
+            download(spec["url"], path, spec["file_sha256"])
+        return path
+
     extracted = RAW / spec["member"]
     archive = RAW / spec["archive"]
-
     if extracted.exists():
         check_hash(extracted, spec["member_sha256"])
         print(f"Using checked local file: {extracted.relative_to(ROOT)}")
@@ -62,28 +86,13 @@ def ensure_data() -> Path:
         check_hash(archive, spec["archive_sha256"])
         print(f"Using checked local archive: {archive.relative_to(ROOT)}")
     else:
-        partial = RAW / (spec["archive"] + ".part")
-        partial.unlink(missing_ok=True)
-        print(f"Downloading {spec['url']}")
-        request = urllib.request.Request(
-            spec["url"], headers={"User-Agent": "warehouse-course-template/1.0"}
-        )
-        try:
-            with urllib.request.urlopen(request, timeout=90) as response:
-                with partial.open("wb") as output:
-                    shutil.copyfileobj(response, output)
-            check_hash(partial, spec["archive_sha256"])
-            partial.replace(archive)
-        finally:
-            partial.unlink(missing_ok=True)
+        download(spec["url"], archive, spec["archive_sha256"])
 
     with zipfile.ZipFile(archive) as bundle:
         if spec["member"] not in bundle.namelist():
             raise ValueError(f"Expected {spec['member']} inside {archive.name}")
-        corrupt = bundle.testzip()
-        if corrupt:
-            raise ValueError(f"Corrupt ZIP member: {corrupt}")
-        partial = RAW / (spec["member"] + ".part")
+        partial = extracted.with_name(extracted.name + ".part")
+        partial.unlink(missing_ok=True)
         try:
             with bundle.open(spec["member"]) as source_stream:
                 with partial.open("wb") as output:
@@ -94,6 +103,17 @@ def ensure_data() -> Path:
             partial.unlink(missing_ok=True)
     print(f"Extracted {extracted.relative_to(ROOT)}")
     return extracted
+
+
+def ensure_data(include_all: bool = True) -> Path:
+    """Restore the full SPR bundle and return the active-location workbook."""
+    RAW.mkdir(parents=True, exist_ok=True)
+    manifest = sources()
+    if not include_all:
+        return ensure_source(manifest["active_locations"])
+    paths = {name: ensure_source(spec) for name, spec in manifest.items()}
+    print(f"Checked {len(paths)} approved source files in {RAW.relative_to(ROOT)}")
+    return paths["active_locations"]
 
 
 def read_inventory(path: Path) -> list[tuple[str, str, int]]:
@@ -191,7 +211,7 @@ def write_baseline(records: list[tuple[str, str, int]], path: Path) -> None:
     (ARTIFACTS / "summary.tex").write_text(summary, encoding="utf-8")
 
     metadata = {
-        "source_url": source()["url"],
+        "source_url": sources()["active_locations"]["url"],
         "source_file": path.name,
         "source_sha256": sha256(path),
         "records": len(records),
@@ -248,7 +268,7 @@ def main() -> int:
     )
     args = parser.parse_args()
     try:
-        path = ensure_data()
+        path = ensure_data(include_all=args.command != "scenario")
         if args.command == "data":
             return 0
         records = read_inventory(path)

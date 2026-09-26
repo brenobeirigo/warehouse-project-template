@@ -4,41 +4,54 @@
 \usepackage{float}
 \usepackage{url}
 
+% Working example and scaffold. Replace the italic prompts with your analysis.
+% See report/WRITING_GUIDE.md for section purposes and writing examples.
+% Keep generated inputs so "all" rebuilds every reported table and figure.
+
 \begin{document}
 
-\title{A Reproducible Baseline for Warehouse Inventory Data}
+\title{Warehouse Improvement Decision: Evidence and Recommendation}
 
 \author{\IEEEauthorblockN{Warehouse Project Team}
 \IEEEauthorblockA{Warehousing course, University of Twente\\
-Replace this line with your group members and group number}}
+Replace with your group members and group number}}
 
 \maketitle
 
 \begin{abstract}
-This short report shows how a warehouse analysis can run from an approved source
-file to a finished PDF. A Python command checks the source file, calculates a
-zone summary, writes a LaTeX table, and compiles this document. Replace the
-example analysis with the evidence needed for your project.
+This example checks an approved S.~P.~Richards inventory file and rebuilds a
+zone table in the report. The table describes a stock snapshot; it does not
+establish an improvement. For the final report, replace this abstract with
+your decision, its measured effect against the current operation, the main
+feasibility condition, and the principal uncertainty.
 \end{abstract}
 
 \begin{IEEEkeywords}
-warehousing, reproducible analysis, inventory, teaching template
+warehousing, activity profiling, storage assignment, reproducible analysis
 \end{IEEEkeywords}
 
-\section{Purpose}
-The S. P. Richards Philadelphia DC case provides operational data for the
-warehousing course~\cite{spr}. This template uses the active-location snapshot
-to show the complete path from source data to a report table. The example is a
-starting point, not a warehouse improvement recommendation.
+\section{Decision and case}
+The S.~P.~Richards Philadelphia DC case supplies the operational data for this
+project~\cite{spr}. This example establishes a reproducible inventory baseline.
+It makes no storage or picking recommendation.
 
-\section{Data and method}
+\emph{Student prompt: State the management decision first. Identify the area,
+the proposed change, the current practice, and the expected operational
+effect. Give the conditions under which the recommendation remains feasible.}
+
+\section{Evidence and current operation}
+\subsection{Data, scope, and checks}
 The pipeline reads the \texttt{DC23ACTIVE} sheet from the approved archive. It
-counts rows as active-location records, counts distinct SKU identifiers within
-each zone, and sums the recorded quantity. The pipeline checks the archive and
-extracted file against the SHA-256 values in \texttt{data/sources.json} before
-reading them. It leaves the original files unchanged.
+counts active-location records and distinct SKUs by zone, then sums recorded
+units on hand. The source archive and extracted file are checked against the
+SHA-256 values in \texttt{data/sources.json}; the originals are left unchanged.
 
-\section{Baseline result}
+\emph{Student prompt: Connect the activity profiles from WH-AS1 to the
+decision. For each decisive measure, give its source file, unit, time period,
+calculation, and any missing or assumed information. Put detailed checks in
+the code.}
+
+\subsection{A generated baseline table}
 \input{artifacts/summary.tex}
 
 \begin{table}[H]
@@ -50,19 +63,42 @@ reading them. It leaves the original files unchanged.
 \input{artifacts/zone_table.tex}
 \end{table}
 
-The table reports a snapshot of locations and units on hand. It does not
-measure demand, picking time, or storage capacity. A separate example command
-applies a uniform multiplier to recorded units to demonstrate how to add a
-scenario. That calculation is not an inventory policy or forecast.
+Table~\ref{tab:zone-summary} reports locations and units on hand at one
+snapshot. It does not measure demand, picking time, or storage capacity. Those
+quantities need separate evidence before they can support a policy choice.
 
-\section{How to reproduce the report}
-Run \texttt{run.cmd all} on Windows or \texttt{./run.sh all} on macOS or Linux
-from the project directory. Docker installs the Python and LaTeX requirements.
-The command writes the checked source files under \texttt{data/raw}, the data
-table and LaTeX inputs under \texttt{artifacts}, and this PDF as
-\texttt{artifacts/main.pdf}. The project README gives the full instructions.
-This separation of raw data, code, and outputs follows reproducible research
-guidance from The Turing Way~\cite{turingway}.
+\section{Storage, layout, and picking options}
+\emph{Student prompt: Explain the current practice and proposed alternatives.
+Cover the storage assignment and space requirement (WH-AS2), layout and flow
+(WH-AS3), and picking method (WH-AS4). Define the objective, resources,
+constraints, units, and assumptions of each model. Show a compact formulation
+where it helps readers assess the decision. Keep full matrices in the code.}
+
+\section{Matched comparison and feasibility}
+\emph{Student prompt: Compare the combined proposal with the current operation
+under the same demand, labor, units, and constraints (WH-AS5). Report absolute
+and relative changes in the measures that matter: travel, cost, throughput,
+space, service, workload, or risk. Show a readable layout figure. Check
+capacity, compatibility, replenishment, and service. Explain interactions
+between the storage, layout, and picking changes.}
+
+\section{Recommendation and implementation}
+\emph{Student prompt: Say what management should implement first, where, and
+in what sequence. Give the expected effect and the operational checks required
+before rollout. Name the measure that would trigger a revision.}
+
+\section{Sensitivity and limits}
+\emph{Student prompt: Recalculate the comparison under at least one important
+uncertain assumption. Explain whether the recommendation changes. State the
+largest evidence gap and what management should monitor after rollout.}
+
+\section{Reproducing the results}
+From the project directory, run \texttt{run.cmd all} on Windows or
+\texttt{./run.sh all} on macOS or Linux. Docker installs Python and LaTeX. The
+command checks original files under \texttt{data/raw}, writes generated tables
+under \texttt{artifacts}, and builds \texttt{artifacts/main.pdf}. Keeping source
+data, code, and generated outputs separate follows reproducible research
+guidance~\cite{turingway}.
 
 \bibliographystyle{IEEEtran}
 \bibliography{report/references}
