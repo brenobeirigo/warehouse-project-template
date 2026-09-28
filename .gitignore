@@ -1,0 +1,55 @@
+# Original course data: keep the folder placeholder, obtain data locally.
+/data/raw/*
+!/data/raw/.gitkeep
+
+# Regenerated example outputs. Copy finished report assets into report/.
+/artifacts/
+
+# Local environments and downloaded development tools.
+.venv/
+venv/
+env/
+/.deps/
+
+# Python bytecode, notebook checkpoints, and tool caches.
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# LaTeX compilation files. Keep .tex, .bib, figures, and finished PDFs in Git.
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.synctex.gz
+
+# Local configuration, editor state, and operating-system files.
+.env
+.env.*
+!.env.example
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Incomplete downloads and temporary files.
+*.part
+*.tmp
+
+# report/example.pdf is intentionally tracked for GitHub's PDF viewer.

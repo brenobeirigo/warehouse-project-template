@@ -1,0 +1,203 @@
+\documentclass[conference]{IEEEtran}
+
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{siunitx}
+\usepackage{url}
+\sisetup{group-separator={,},group-minimum-digits=4}
+
+% Replace the example author names and affiliation.
+% See README.md for setup instructions.
+% Keep generated inputs so the report uses the saved evidence.
+
+\begin{document}
+\pagestyle{plain}
+\raggedbottom
+
+\title{Warehouse Improvement Report: An Annotated Template}
+
+\author{\IEEEauthorblockN{Amira de Vries, Luca Jansen, and Noor Bakker}
+\IEEEauthorblockA{[Department or organization]\\
+{[City, country]}}}
+
+\maketitle
+\thispagestyle{plain}
+\input{artifacts/zone_chart_count.tex}
+
+\begin{abstract}
+Summarize the warehouse problem, the approaches evaluated, and the main
+findings. Include a decision-relevant quantitative result with its unit and
+comparator, then state the overall recommendation and its main limitation.
+Write the abstract after completing the analysis so that it reflects the
+final comparison. Keep it self-contained and concise.
+\end{abstract}
+
+\begin{IEEEkeywords}
+warehousing, activity profiling, storage assignment, order picking
+\end{IEEEkeywords}
+
+\section*{Using this template}
+Each section describes the content it should cover. You are free to organize
+the discussion within it. Replace the guidance with your analysis and update
+the title, authors, and affiliation. The generated evidence examples at the
+end demonstrate how code outputs can be included in the report.
+
+For the abstract, IEEE recommends a self-contained paragraph of up to
+250 words~\cite{ieee-structure}. The UW--Madison guide explains how to connect
+the purpose, methods, findings, and implications~\cite{uw-abstract}.
+
+\section{Introduction}
+Introduce the warehouse and the operational questions being investigated.
+State the scope and the criteria used to assess proposed approaches, such as
+travel, space, throughput, service, and implementation effort. Explain how
+activity profiling informs the storage, layout, and order picking analyses,
+and how the final comparison weighs their benefits, limitations, and
+interactions. Establish the purpose of the evaluation while leaving its
+outcome to the analysis.
+
+\section{Data and evaluation methods}
+Describe the data, observation periods, units, and checks that support the
+analysis. Explain the common baseline, performance measures, assumptions,
+and experimental settings needed to interpret and reproduce the comparisons.
+Present details specific to an approach where that approach is evaluated.
+Cite the sources supporting the methods and make the reported results
+traceable to the saved evidence~\cite{turingway}. Keep installation and
+execution instructions in the README.
+
+\section{Warehouse activity profiling}
+Characterize the current operation using warehouse activity, customer-order,
+item-activity, and inventory profiles, together with relevant performance
+indicators. Explain the patterns, imbalances, or constraints revealed by the
+evidence and their implications for subsequent design choices. Define the
+scope, units, and calculation of each measure. Select tables and figures
+that support the diagnosis and explain what they show.
+
+\section{Storage assignment and space requirements}
+Explain the proposed storage approaches and how they determine product
+locations and space requirements. Describe the model, parameters, assumptions,
+and constraints needed to evaluate them. Compare their performance with the
+current assignment on a consistent basis, supported by quantitative results
+and a readable layout. Discuss capacity, compatibility, replenishment, and
+service, and identify the conditions under which each approach is suitable.
+
+\section{Warehouse layout design}
+Explain the layout alternatives and the space, storage, throughput, and
+handling requirements they address. Show the arrangements and flows clearly,
+with the scale and assumptions needed to interpret them. Evaluate relevant
+performance measures against the baseline and discuss operational feasibility,
+including access, safety, replenishment, staging, and equipment. Explain the
+benefits, limitations, and implementation implications of the alternatives.
+
+\section{Order picking system design}
+Describe the proposed picking approaches and why they suit the observed
+workload. Explain the relevant process rules, resources, and interactions
+with storage and layout. Evaluate the alternatives under comparable operating
+conditions using appropriate performance measures. Discuss uncertainty,
+service, replenishment, and implementation effort, and explain the conditions
+under which the approaches are feasible and useful.
+
+\section{Performance evaluation and trade-offs}
+Bring together the storage, layout, and picking findings using consistent
+baselines, demand, units, and constraints. Weigh their effects on performance,
+space, service, workload, cost, and risk where the evidence permits. Examine
+how the approaches interact when combined, including benefits or burdens
+shifted between processes. Explain how uncertainty and data limitations affect
+the comparison, then justify a suitable combination or sequence of changes
+and the conditions for adopting it.
+
+Table~\ref{tab:comparison-pattern} illustrates a comparison with the baseline.
+Choose measures relevant to your analysis, define their scope and units,
+and replace the placeholders with values generated by your code. Adapt the
+rows to the alternatives evaluated. Define the service measure and cost
+components in the text.
+
+\begin{table}[!ht]
+\caption{A common set of measures supports comparison of the baseline and proposed interventions.}
+\label{tab:comparison-pattern}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Option & \shortstack{Travel\\(m/order)} & \shortstack{Service\\(\%)} & \shortstack{Cost\\(EUR/order)} \\
+\midrule
+Baseline & [value] & [value] & [value] \\
+Storage & [value] & [value] & [value] \\
+Layout & [value] & [value] & [value] \\
+Picking & [value] & [value] & [value] \\
+Combined & [value] & [value] & [value] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Conclusion}
+Answer the overall evaluation question using the strongest findings. State
+the recommended course of action, the main quantitative evidence supporting
+it, and the conditions or limitations that matter to the decision. Identify
+any further evidence or monitoring needed before implementation. Keep the
+conclusion consistent with the preceding analysis.
+
+\section*{Generated evidence examples}
+The following tables and chart demonstrate the connection between the code
+and the report. Replace them with evidence relevant to your analysis. The
+S.~P.~Richards data describe a Philadelphia distribution center~\cite{spr};
+the inventory quantities in this example are dated 1 February 2005.
+Table~\ref{tab:example-settings} records the example settings. Use units in
+table headings and chart axes, and captions that state the finding and its
+scope.
+
+\begin{table}[!ht]
+\caption{The inventory baseline and illustrative scenario use the measures and assumptions listed here.}
+\label{tab:example-settings}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{artifacts/settings_table.tex}
+\end{table}
+
+\input{artifacts/summary.tex}
+
+\begin{table}[H]
+\caption{In the Philadelphia DC, zone~\largestLocationZone{} has the most active picking locations, while zone~\largestUnitZone{} holds the most selling units on hand.}
+\label{tab:zone-summary}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{artifacts/zone_table.tex}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\columnwidth]{artifacts/zone_locations.png}
+\caption{Zone~\largestLocationZone{} contains \num{\largestLocationShare}\% of the Philadelphia DC's \activeLocationCount{} active picking locations.}
+\label{fig:zone-locations}
+\end{figure}
+
+Table~\ref{tab:zone-summary} and Fig.~\ref{fig:zone-locations} show how inventory
+is distributed across zones. Active picking locations and selling units on hand rank the
+zones differently. Demand, travel time, and available capacity need separate
+data to evaluate storage policies.
+
+\input{artifacts/scenario_caption_values.tex}
+Table~\ref{tab:scenario-example} compares observed on-hand inventory with a quantity
+multiplied by the same factor in each zone. The calculation changes recorded
+quantities without changing warehouse operations.
+It demonstrates how to present a generated comparison. A policy experiment
+should change a defined operating decision and evaluate its consequences.
+
+\begin{table}[H]
+\caption{\scenarioCaptionFinding}
+\label{tab:scenario-example}
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\input{artifacts/scenario_table.tex}
+\end{table}
+
+\input{artifacts/scenario_summary.tex}
+
+\bibliographystyle{IEEEtran}
+\bibliography{report/references}
+
+\end{document}

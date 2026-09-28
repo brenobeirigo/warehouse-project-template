@@ -1,0 +1,1 @@
+"""Warehouse analysis example."""
